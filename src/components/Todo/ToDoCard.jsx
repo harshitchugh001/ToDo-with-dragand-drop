@@ -10,7 +10,7 @@ const ToDoCard = ({id, index, todo, onEdit, innerRef, draggableProps, dragHandle
 
   const [menu, setMenu] = useState(false);
 
-  const { title, image, date, attach } = todo;
+  const { title, image, date, attach,duedate } = todo;
 
   const handleEdit = () => {
     setMenu(false);
@@ -30,11 +30,13 @@ const ToDoCard = ({id, index, todo, onEdit, innerRef, draggableProps, dragHandle
           {image && <img src={image} className='image' alt=""/>}
       </div>
       <h3 className='title'>{title}</h3>
+      <p className="">Due date:{duedate}</p>
       <div className='footer-and-menu'>
         <div className='todo-footer'>
             <TfiAlignLeft className='footer' />
             <CiCircleChevRight className='footer' />
             <p className='footer'>{date}</p>
+            
             <AiOutlinePaperClip className='footer' />
             <p className='footer'>{attach}</p>
         </div>
