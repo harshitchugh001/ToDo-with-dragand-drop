@@ -1,28 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Data } from '../utils/data';
+import { loadState, saveState } from '../utils/localstorage';
 
-const initialState = {
-    todos: Data,
+const persistedState = loadState();
+
+const initialState = persistedState || {
+    todos: [],
     columns: [
       { 
         id: 1,
         category: 'resources',
-        todos: Data.filter((todo) => todo.status === 'resources'),
+        todos: [],
       },
       {
         id: 2,
         category: 'todo',
-        todos: Data.filter((todo) => todo.status === 'todo'),
+        todos: [],
       },
       {
         id: 3,
         category: 'doing',
-        todos: Data.filter((todo) => todo.status === 'doing'),
+        todos: [],
       },
       {
         id: 4,
         category: 'done',
-        todos: Data.filter((todo) => todo.status === 'done'),
+        todos: [],
       },
     ],
 };
@@ -34,6 +36,7 @@ export const todoSlice = createSlice({
     addTodo: (state, action) => {
       state.todos.push(action.payload);
       state.columns = state.columns.map((column) => column.category === action.payload.status ? {...column, todos: [...column.todos, action.payload]} : column);
+      saveState(state); // Save state to local storage
     },
     updateTodo: (state, action) => {
       const { id, updates } = action.payload;
@@ -54,11 +57,12 @@ export const todoSlice = createSlice({
         state.columns = state.columns.map(column => 
           column.category === prevColumn.category ? prevColumn : column
         );
-      }else{
+      } else {
         state.columns = state.columns.map(column => 
           (column.category === updates.status) ? {...column, todos: column.todos.map(todo => todo.id === id ? {...todo, ...updates} : todo)} : column
         );          
       }
+      saveState(state); // Save state to local storage
     },
     deleteTodo: (state, action) => {
       const { id, status } = action.payload;
@@ -67,11 +71,13 @@ export const todoSlice = createSlice({
       state.columns = state.columns.map(column => 
         column.category === status ? {...column, todos: column.todos.filter(todo => todo.id !== id)} : column
       );
+      saveState(state); // Save state to local storage
     },   
     moveTodo: (state, action) => {
       const newColumn = action.payload;
       state.todos = newColumn.map(column => column.todos).flat();
       state.columns = newColumn;
+      saveState(state); // Save state to local storage
     },     
   },
 });
