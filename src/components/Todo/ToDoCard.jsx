@@ -30,7 +30,7 @@ const ToDoCard = ({id, index, todo, onEdit, innerRef, draggableProps, dragHandle
           {image && <img src={image} className='image' alt=""/>}
       </div>
       <h3 className='title'>{title}</h3>
-      <p className="">Due date:{duedate}</p>
+      <p className="title">Due date:{duedate}</p>
       <div className='footer-and-menu'>
         <div className='todo-footer'>
             <TfiAlignLeft className='footer' />
